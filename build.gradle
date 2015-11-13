@@ -2,22 +2,25 @@
 
 ext {
     versions = [
-            buildTools   : '23.0.2',
-            compileSdk   : 23,
-            minSdk       : 16,
-            targetSdk    : 23,
-            supportLib   : '23.1.1',
-            playService  : '8.3.0',
-            fj           : '4.4',
-            rx           : '1.0.14',
+            buildTools : '23.0.2',
+            compileSdk : 23,
+            minSdk     : 16,
+            targetSdk  : 23,
+            supportLib : '23.1.1',
+            playService: '8.3.0',
+            fj         : '4.4',
+            rx         : '1.0.14',
     ]
 
     Properties properties = new Properties()
-    properties.load(project.rootProject.file('local.properties').newDataInputStream())
+    def localProp = project.rootProject.file('local.properties')
+    if (localProp.exists()) {
+        properties.load(project.rootProject.file('local.properties').newDataInputStream())
+    }
     env = [
-            sdkDir           : properties.getProperty('sdk.dir') ?: System.getenv("ANDROID_HOME"),
-            j8Home           : properties.getProperty('java8_home') ?: System.getenv("JAVA8_HOME"),
-            j7Home           : properties.getProperty('java7_home') ?: System.getenv("JAVA7_HOME"),
+            sdkDir: properties.getProperty('sdk.dir') ?: System.getenv("ANDROID_HOME"),
+            j8Home: properties.getProperty('java8_home') ?: System.getenv("JAVA8_HOME"),
+            j7Home: properties.getProperty('java7_home') ?: System.getenv("JAVA7_HOME"),
     ]
 }
 
@@ -49,6 +52,6 @@ task clean(type: Delete) {
     delete rootProject.buildDir
 }
 
-task wrapper(type: Wrapper){
-  gradleVersion = '2.5'
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.5'
 }
