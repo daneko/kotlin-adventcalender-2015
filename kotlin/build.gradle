@@ -1,0 +1,49 @@
+buildscript {
+    ext.kotlinVersions = '1.0.0-beta-2417'
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersions"
+    }
+}
+
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+
+
+android {
+    compileSdkVersion versions.compileSdk
+    buildToolsVersion versions.buildTools
+
+    defaultConfig {
+        applicationId "com.github.daneko.android.kotlin"
+        minSdkVersion versions.minSdk
+        targetSdkVersion versions.targetSdk
+        versionCode 1
+        versionName "1.0"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    sourceSets {
+        main.java.srcDirs += 'src/main/kotlin'
+        def plainDir = project(':plain').projectDir
+        main.res.srcDirs += "$plainDir/src/main/res"
+    }
+}
+
+dependencies {
+    compile "com.android.support:appcompat-v7:$versions.supportLib"
+    compile "com.android.support:design:$versions.supportLib"
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersions"
+}
+
+repositories {
+    mavenCentral()
+}
