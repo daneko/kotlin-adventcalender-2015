@@ -8,19 +8,26 @@ ext {
             targetSdk  : 23,
             supportLib : '23.1.1',
             playService: '8.3.0',
+            retrofit   : '2.0.0-beta2',
             fj         : '4.4',
             rx         : '1.0.14',
     ]
 
     Properties properties = new Properties()
     def localProp = project.rootProject.file('local.properties')
-    if (localProp.exists()) {
-        properties.load(project.rootProject.file('local.properties').newDataInputStream())
+    if (!localProp.exists()) {
+        throw new RuntimeException("set local.properties");
+    }
+    properties.load(localProp.newDataInputStream())
+    def apiKey = properties.getProperty('openweathermap.apiKey')
+    if (apiKey == null) {
+        throw new RuntimeException("need OpenWeatherMap ApiKey");
     }
     env = [
-            sdkDir: properties.getProperty('sdk.dir') ?: System.getenv("ANDROID_HOME"),
-            j8Home: properties.getProperty('java8_home') ?: System.getenv("JAVA8_HOME"),
-            j7Home: properties.getProperty('java7_home') ?: System.getenv("JAVA7_HOME"),
+            sdkDir              : properties.getProperty('sdk.dir') ?: System.getenv("ANDROID_HOME"),
+            j8Home              : properties.getProperty('java8_home') ?: System.getenv("JAVA8_HOME"),
+            j7Home              : properties.getProperty('java7_home') ?: System.getenv("JAVA7_HOME"),
+            openWeatherMapApiKey: apiKey,
     ]
 }
 
@@ -40,6 +47,7 @@ allprojects {
 
     repositories {
         jcenter()
+        maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
     }
 
 
