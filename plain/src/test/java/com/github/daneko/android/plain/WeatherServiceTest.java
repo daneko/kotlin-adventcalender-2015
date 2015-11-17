@@ -3,15 +3,14 @@ package com.github.daneko.android.plain;
 import com.squareup.okhttp.mockwebserver.MockResponse;
 import com.squareup.okhttp.mockwebserver.MockWebServer;
 
-import org.junit.After;
-import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 
 /**
@@ -19,18 +18,8 @@ import static org.assertj.core.api.Assertions.*;
  */
 public class WeatherServiceTest {
 
-    private MockWebServer mockWebServer;
-
-    @Before
-    public void setup() throws IOException {
-        mockWebServer = new MockWebServer();
-        mockWebServer.start();
-    }
-
-    @After
-    public void tearDown() throws IOException {
-        mockWebServer.shutdown();
-    }
+    @Rule
+    public MockWebServer mockWebServer = new MockWebServer();
 
     @Test
     public void とりあえず正常系だけ() throws IOException {
