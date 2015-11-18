@@ -44,4 +44,14 @@ android {
 dependencies {
     compile "com.android.support:appcompat-v7:${versions.supportLib}"
     compile "com.android.support:design:${versions.supportLib}"
+    compile "com.squareup.retrofit:retrofit:${versions.retrofit}"
+    compile("com.squareup.retrofit:adapter-rxjava:${versions.retrofit}") {
+        exclude group: 'io.reactivex', module: 'rxjava'
+    }
+    compile "com.squareup.retrofit:converter-moshi:${versions.retrofit}"
+
+    compile "io.reactivex:rxandroid:${versions.rxandroid}"
+    compile "io.reactivex:rxjava:${versions.rxandroid}"
+
+    provided 'org.projectlombok:lombok:1.16.6'
 }

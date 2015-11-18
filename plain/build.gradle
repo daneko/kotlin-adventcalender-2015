@@ -30,8 +30,8 @@ dependencies {
     }
     compile "com.squareup.retrofit:converter-moshi:${versions.retrofit}"
 
-    compile 'io.reactivex:rxandroid:1.0.1'
-    compile 'io.reactivex:rxjava:1.0.16'
+    compile "io.reactivex:rxandroid:${versions.rxandroid}"
+    compile "io.reactivex:rxjava:${versions.rxandroid}"
 
     testCompile 'junit:junit:4.12'
     testCompile 'com.squareup.okhttp:mockwebserver:2.5.0'
