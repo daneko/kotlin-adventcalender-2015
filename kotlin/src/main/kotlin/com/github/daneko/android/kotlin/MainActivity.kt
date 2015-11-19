@@ -22,11 +22,7 @@ class MainActivity : AppCompatActivity() {
         fab.setOnClickListener { view ->
             WeatherService.currentTokyoWeather().
                     subscribeOn(Schedulers.newThread()).
-                    map {
-                        Snackbar.
-                                make(view, it.main, Snackbar.LENGTH_LONG).
-                                setAction("Action", null)
-                    }.
+                    map { view.snack(it.main) }.
                     observeOn(AndroidSchedulers.mainThread()).
                     subscribe { it.show() }
         }
