@@ -3,6 +3,7 @@ package com.github.daneko.android.retrolambda;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -12,7 +13,11 @@ import android.support.v7.widget.Toolbar;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
+import lombok.experimental.ExtensionMethod;
+
+@ExtensionMethod(Extensions.ViewExtensions.class)
 public class MainActivity extends AppCompatActivity {
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,9 +29,7 @@ public class MainActivity extends AppCompatActivity {
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(view -> WeatherService.currentTokyoWeather()
                 .subscribeOn(Schedulers.newThread())
-                .map(weather -> Snackbar
-                        .make(view, weather.getMain(), Snackbar.LENGTH_LONG)
-                        .setAction("Action", null))
+                .map(weather -> view.snack(weather.getMain()))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(Snackbar::show));
     }
