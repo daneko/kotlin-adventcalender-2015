@@ -33,7 +33,7 @@ dependencies {
     compile "io.reactivex:rxandroid:${versions.rxandroid}"
     compile "io.reactivex:rxjava:${versions.rxandroid}"
 
-    testCompile 'junit:junit:4.12'
-    testCompile 'com.squareup.okhttp:mockwebserver:2.5.0'
-    testCompile 'org.assertj:assertj-core:1.7.1'
+    testCompile "junit:junit:${versions.junit}"
+    testCompile "com.squareup.okhttp:mockwebserver:${versions.okhttpMockserver}"
+    testCompile "org.assertj:assertj-core:${versions.assertjCore}"
 }

@@ -1,12 +1,12 @@
 package com.github.daneko.android.kotlin
 
-import android.os.Bundle
-import android.support.design.widget.FloatingActionButton
-import android.support.design.widget.Snackbar
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.Toolbar
-import android.view.Menu
-import android.view.MenuItem
+import android.os.*
+import android.support.design.widget.*
+import android.support.v7.app.*
+import android.support.v7.widget.*
+import android.view.*
+import rx.android.schedulers.AndroidSchedulers
+import rx.schedulers.Schedulers
 
 class MainActivity : AppCompatActivity() {
 
@@ -17,9 +17,17 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
 
         val fab = findViewById(R.id.fab) as FloatingActionButton
-        fab.setOnClickListener({ view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG).setAction("Action", null).show()
-        })
+        fab.setOnClickListener { view ->
+            WeatherService.currentTokyoWeather().
+                    subscribeOn(Schedulers.newThread()).
+                    observeOn(AndroidSchedulers.mainThread()).
+                    subscribe { weather ->
+                        Snackbar.
+                                make(view, weather.main, Snackbar.LENGTH_LONG).
+                                setAction("Action", null).
+                                show()
+                    }
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

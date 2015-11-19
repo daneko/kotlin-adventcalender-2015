@@ -22,6 +22,7 @@ android {
         targetSdkVersion versions.targetSdk
         versionCode 1
         versionName "1.0"
+        buildConfigField "String", "OPEN_WEATHER_MAP_APIKEY", "\"$env.openWeatherMapApiKey\""
     }
 
     buildTypes {
@@ -35,13 +36,26 @@ android {
         main.java.srcDirs += 'src/main/kotlin'
         def plainDir = project(':plain').projectDir
         main.res.srcDirs += "$plainDir/src/main/res"
+        test.java.srcDirs += 'src/test/kotlin'
     }
 }
 
 dependencies {
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     compile "com.android.support:appcompat-v7:$versions.supportLib"
     compile "com.android.support:design:$versions.supportLib"
-    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    compile "com.squareup.retrofit:retrofit:${versions.retrofit}"
+    compile("com.squareup.retrofit:adapter-rxjava:${versions.retrofit}") {
+        exclude group: 'io.reactivex', module: 'rxjava'
+    }
+    compile "com.squareup.retrofit:converter-moshi:${versions.retrofit}"
+
+    compile "io.reactivex:rxandroid:${versions.rxandroid}"
+    compile "io.reactivex:rxjava:${versions.rxandroid}"
+
+    testCompile "junit:junit:${versions.junit}"
+    testCompile "com.squareup.okhttp:mockwebserver:${versions.okhttpMockserver}"
+    testCompile "org.assertj:assertj-core:${versions.assertjCore}"
 }
 
 repositories {
