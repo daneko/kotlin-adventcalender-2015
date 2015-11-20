@@ -5,8 +5,11 @@ import android.support.design.widget.FloatingActionButton
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+
+import rx.Observable
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
 
@@ -20,11 +23,13 @@ class MainActivity : AppCompatActivity() {
 
         val fab = findViewById(R.id.fab) as FloatingActionButton
         fab.setOnClickListener { view ->
+            val cause = RuntimeException("cause")
             WeatherService.currentTokyoWeather().
                     subscribeOn(Schedulers.newThread()).
                     map { view.snack(it.main) }.
                     observeOn(AndroidSchedulers.mainThread()).
-                    subscribe { it.show() }
+                    flatMap { snack -> Observable.error<Snackbar>(RuntimeException("test", cause)) }.
+                    subscribe({ it.show() }, {Log.w("test", it)})
         }
     }
 

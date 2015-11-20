@@ -1,6 +1,7 @@
 package com.github.daneko.android.retrolambda;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -9,6 +10,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
+import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
@@ -22,13 +24,19 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(view -> WeatherService.currentTokyoWeather()
-                .subscribeOn(Schedulers.newThread())
-                .map(weather -> Snackbar
-                        .make(view, weather.getMain(), Snackbar.LENGTH_LONG)
-                        .setAction("Action", null))
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(Snackbar::show));
+        fab.setOnClickListener(view -> {
+            final RuntimeException cause = new RuntimeException("cause");
+            WeatherService.currentTokyoWeather()
+                    .subscribeOn(Schedulers.newThread())
+                    .map(weather -> Snackbar
+                            .make(view, weather.getMain(), Snackbar.LENGTH_LONG)
+                            .setAction("Action", null))
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .flatMap(bar -> Observable.<Snackbar>error(new RuntimeException("test", cause)))
+                    .subscribe(Snackbar::show, th -> {
+                        Log.w("test", th);
+                    });
+        });
     }
 
     @Override

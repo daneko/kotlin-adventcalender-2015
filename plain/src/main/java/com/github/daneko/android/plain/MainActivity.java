@@ -1,6 +1,7 @@
 package com.github.daneko.android.plain;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -10,6 +11,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
+import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.functions.Func1;
@@ -28,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View view) {
+                final RuntimeException cause = new RuntimeException("cause");
                 WeatherService.currentTokyoWeather()
                         .subscribeOn(Schedulers.newThread())
                         .map(new Func1<WeatherResponse.Weather, Snackbar>() {
@@ -39,12 +42,24 @@ public class MainActivity extends AppCompatActivity {
                             }
                         })
                         .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(new Action1<Snackbar>() {
+                        .flatMap(new Func1<Snackbar, Observable<Snackbar>>() {
                             @Override
-                            public void call(Snackbar bar) {
-                                bar.show();
+                            public Observable<Snackbar> call(Snackbar snackbar) {
+                                return Observable.error(new RuntimeException("test", cause));
                             }
-                        });
+                        })
+                        .subscribe(new Action1<Snackbar>() {
+                                       @Override
+                                       public void call(Snackbar bar) {
+                                           bar.show();
+                                       }
+                                   },
+                                new Action1<Throwable>() {
+                                    @Override
+                                    public void call(Throwable throwable) {
+                                        Log.w("test", throwable);
+                                    }
+                                });
             }
         });
     }
