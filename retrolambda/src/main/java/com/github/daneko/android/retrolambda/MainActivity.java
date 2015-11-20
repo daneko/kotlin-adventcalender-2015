@@ -24,12 +24,11 @@ public class MainActivity extends AppCompatActivity {
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(view -> WeatherService.currentTokyoWeather()
                 .subscribeOn(Schedulers.newThread())
+                .map(weather -> Snackbar
+                        .make(view, weather.getMain(), Snackbar.LENGTH_LONG)
+                        .setAction("Action", null))
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(weather -> Snackbar
-                                .make(view, weather.getMain(), Snackbar.LENGTH_LONG)
-                                .setAction("Action", null)
-                                .show()
-                ));
+                .subscribe(Snackbar::show));
     }
 
     @Override

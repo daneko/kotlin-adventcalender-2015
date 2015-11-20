@@ -1,10 +1,12 @@
 package com.github.daneko.android.kotlin
 
-import android.os.*
-import android.support.design.widget.*
-import android.support.v7.app.*
-import android.support.v7.widget.*
-import android.view.*
+import android.os.Bundle
+import android.support.design.widget.FloatingActionButton
+import android.support.design.widget.Snackbar
+import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.Toolbar
+import android.view.Menu
+import android.view.MenuItem
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
 
@@ -20,13 +22,13 @@ class MainActivity : AppCompatActivity() {
         fab.setOnClickListener { view ->
             WeatherService.currentTokyoWeather().
                     subscribeOn(Schedulers.newThread()).
-                    observeOn(AndroidSchedulers.mainThread()).
-                    subscribe { weather ->
+                    map {
                         Snackbar.
-                                make(view, weather.main, Snackbar.LENGTH_LONG).
-                                setAction("Action", null).
-                                show()
-                    }
+                                make(view, it.main, Snackbar.LENGTH_LONG).
+                                setAction("Action", null)
+                    }.
+                    observeOn(AndroidSchedulers.mainThread()).
+                    subscribe { it.show() }
         }
     }
 

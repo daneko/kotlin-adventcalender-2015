@@ -12,6 +12,7 @@ import android.support.v7.widget.Toolbar;
 
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
+import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
 public class MainActivity extends AppCompatActivity {
@@ -29,12 +30,19 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(final View view) {
                 WeatherService.currentTokyoWeather()
                         .subscribeOn(Schedulers.newThread())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(new Action1<WeatherResponse.Weather>() {
+                        .map(new Func1<WeatherResponse.Weather, Snackbar>() {
                             @Override
-                            public void call(WeatherResponse.Weather weather) {
-                                Snackbar.make(view, weather.getMain(), Snackbar.LENGTH_LONG)
-                                        .setAction("Action", null).show();
+                            public Snackbar call(WeatherResponse.Weather weather) {
+                                return Snackbar
+                                        .make(view, weather.getMain(), Snackbar.LENGTH_LONG)
+                                        .setAction("Action", null);
+                            }
+                        })
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Action1<Snackbar>() {
+                            @Override
+                            public void call(Snackbar bar) {
+                                bar.show();
                             }
                         });
             }
