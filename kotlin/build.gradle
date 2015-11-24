@@ -27,8 +27,13 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            debuggable true
+            signingConfig signingConfigs.debug
+            minifyEnabled true
+            proguardFiles(
+                    getDefaultProguardFile('proguard-android-optimize.txt'),
+                    'proguard-rules.pro',
+                    "$rootDir/proguard-common-rules.pro")
         }
     }
 
@@ -52,6 +57,8 @@ dependencies {
 
     compile "io.reactivex:rxandroid:${versions.rxandroid}"
     compile "io.reactivex:rxjava:${versions.rxandroid}"
+
+    compile "com.infstory:proguard-annotations:1.0.2"
 
     testCompile "junit:junit:${versions.junit}"
     testCompile "com.squareup.okhttp:mockwebserver:${versions.okhttpMockserver}"
