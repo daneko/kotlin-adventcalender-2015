@@ -36,7 +36,7 @@ dependencies {
     compile "com.squareup.retrofit:converter-moshi:${versions.retrofit}"
 
     compile "io.reactivex:rxandroid:${versions.rxandroid}"
-    compile "io.reactivex:rxjava:${versions.rxandroid}"
+    compile "io.reactivex:rxjava:${versions.rx}"
 
     compile "com.infstory:proguard-annotations:1.0.2"
 
